@@ -1,2 +1,2 @@
-# TIL
-주니의 Today I Learned(TIL)
+# Today I Learned(TIL)
+
