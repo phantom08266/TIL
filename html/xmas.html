@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2020년을 보내며</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Poor+Story&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Nanum Pen Script', cursive;
+            font-family: 'Poor Story', cursive;
+        }
+
+        body {
+            background-color: #9b070f;
+        }
+
+        .envelope {
+            /* background-color: yellow; */
+
+            width: 200px;
+            height: 200px;
+
+            background-image: url(https://pngimg.com/uploads/envelope/envelope_PNG18366.png);
+            background-size: cover;
+            background-position: center;
+
+            margin: 200px auto 0px auto;
+            /* 상우하좌 시계방향으로 간다. */
+        }
+
+        .envelope-msg {
+            color: white;
+            text-align: center;
+        }
+
+        .letter-close {
+            display: none;
+        }
+
+        .letter-open {
+            display: block;
+        }
+
+        .rtan {
+            background-color: white;
+            background-image: url('https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/xmas/rtan.gif');
+            background-size: cover;
+            background-position: center;
+
+            width: 200px;
+            height: 200px;
+
+            margin: 100px auto 0px auto;
+
+            border-radius: 100px;
+            border: 5px solid white;
+            box-shadow: 0px 0px 20px 0px white;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        .messagebox {
+            background-color: ivory;
+            width: 400px;
+
+            margin: auto;
+            color: brown;
+            padding: 30px;
+            font-size: 17px;
+            line-height: 30px;
+
+            box-shadow: 0px 0px 20px 0px white;
+        }
+
+        .from {
+            text-align: right;
+            margin-bottom: 0px;
+        }
+
+        /* 760px보다 작으면 해당 클래스들 적용 */
+        @media screen and (max-width: 760px) {
+            .messagebox {
+                width: 300px;
+                padding: 20px;
+            }
+
+            .rtan {
+                width: 150px;
+                height: 150px;
+                margin: 70px auto 0px auto;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .envelope {
+                margin: 150px auto 0px auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="letter-close">
+        <div class="envelope"></div>
+        <h2 class="envelope-msg">봉투를 열어라</h2>
+    </div>
+    <div class="letter-open">
+        <div class="rtan"></div>
+        <h1>
+            2020년 수고 많았어!
+        </h1>
+        <div class="messagebox">
+            라라라. <br />
+            푸른 하늘 가운데 기다랗게 줄지은 바람을 <br />
+            타고 바다를 건너면 보일 듯 한 신기루. <br />
+            언덕 위 큰 나무 하늘과 맞닿은 꿈들이 노래해. <br />
+            구름 숲 그 위로 내 마음 던지면 달콤한 사탕 같은 햇살. <br />
+            새로움으로 심장 뛰게 하는 모든 것들. <br />
+            태양이 머물다 간 사막. <br />
+            <p class=from>2020.02.27 준</p>
+        </div>
+    </div>
+
+</body>
+
+</html>
