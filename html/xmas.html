@@ -4,16 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-    <title>2020년을 보내며</title>
-    <script  src="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/xmas/snow.js"></script>
+    <title>노래카드</title>
+    <!-- 카카오톡 등 공유할때 보이는 정보 -->
+    <!-- image크기는 800x400이다. -->
+    <meta property="og:image"
+        content="https://www.christmastreeassociation.org/wp-content/uploads/2016/06/multiple-christmas-trees-in-one-household-800x400.jpg">
+    <meta property="og:title" content="준의 카드">
+    <meta property="og:description" content="라라라 카드">
+
+    <!-- favicon이라 불리며 title옆에 아이콘을 말함. -->
+    <link rel="shortcut icon" href="https://freepngimg.com/download/christmas/26196-6-christmas-stocking.png">
+
+    <!-- 폰트설정 -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Poor+Story&display=swap"
         rel="stylesheet">
+
+    <!-- 배경에 눈오도록 설정 -->
+    <script src="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/xmas/snow.js"></script>
+
     <style>
         * {
             font-family: 'Nanum Pen Script', cursive;
             font-family: 'Poor Story', cursive;
         }
+
         /*body나 h1같이 교유한 태그들은 별도로 .을 사용하지 않아도 스타일을 지정할 수 있다.*/
         body {
             background-color: #9b070f;
@@ -118,9 +133,9 @@
             document.getElementsByClassName("letter-close")[0].style.display = 'none'
             document.getElementsByClassName("letter-open")[0].style.display = 'block'
         }
-        function go_rtan(){
+        function go_rtan() {
             alert('앗! 어떻게 찾았지')
-            window.location.href='https://www.naver.com'
+            window.location.href = 'https://www.naver.com'
         }
     </script>
 </head>
