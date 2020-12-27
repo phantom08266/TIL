@@ -3,8 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <title>2020년을 보내며</title>
+    <script  src="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/xmas/snow.js"></script>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Poor+Story&display=swap"
         rel="stylesheet">
@@ -13,7 +14,7 @@
             font-family: 'Nanum Pen Script', cursive;
             font-family: 'Poor Story', cursive;
         }
-
+        /*body나 h1같이 교유한 태그들은 별도로 .을 사용하지 않아도 스타일을 지정할 수 있다.*/
         body {
             background-color: #9b070f;
         }
@@ -30,6 +31,7 @@
 
             margin: 200px auto 0px auto;
             /* 상우하좌 시계방향으로 간다. */
+            cursor: pointer;
         }
 
         .envelope-msg {
@@ -38,16 +40,18 @@
         }
 
         .letter-close {
-            display: none;
+            display: block;
         }
 
         .letter-open {
-            display: block;
+            display: none;
         }
 
         .rtan {
             background-color: white;
-            background-image: url('https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/xmas/rtan.gif');
+            /* background-image: url('https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/xmas/rtan.gif'); */
+            /* background-image: url('https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/xmas/Webp.net-gifmaker+(2).gif'); */
+            background-image: url('https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/xmas/Webp.net-gifmaker+(1).gif');
             background-size: cover;
             background-position: center;
 
@@ -59,6 +63,7 @@
             border-radius: 100px;
             border: 5px solid white;
             box-shadow: 0px 0px 20px 0px white;
+            cursor: pointer;
         }
 
         h1 {
@@ -108,15 +113,25 @@
             }
         }
     </style>
+    <script>
+        function open_letter() {
+            document.getElementsByClassName("letter-close")[0].style.display = 'none'
+            document.getElementsByClassName("letter-open")[0].style.display = 'block'
+        }
+        function go_rtan(){
+            alert('앗! 어떻게 찾았지')
+            window.location.href='https://www.naver.com'
+        }
+    </script>
 </head>
 
-<body>
+<body id="sky">
     <div class="letter-close">
-        <div class="envelope"></div>
+        <div class="envelope" onclick="open_letter()"></div>
         <h2 class="envelope-msg">봉투를 열어라</h2>
     </div>
     <div class="letter-open">
-        <div class="rtan"></div>
+        <div class="rtan" onclick="go_rtan()"></div>
         <h1>
             2020년 수고 많았어!
         </h1>
