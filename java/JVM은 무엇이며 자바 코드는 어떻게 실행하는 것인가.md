@@ -1,5 +1,7 @@
 
-## JVM이란 무엇인가
+## JVM(Java Virtual Machine)이란 무엇인가
+자바 컴파일러가 Java Byte Code로 변환시킨 .class 파일을 Byte code인 기계어로 변환시켜주는 역할을 한다.
+이래서 자바는 C언어보다는 JVM을 거쳐야 하므로 속도가 느리지만 이를 JIT로 일부 극복하였다. 
 
 
 ## 컴파일 하는 방법
