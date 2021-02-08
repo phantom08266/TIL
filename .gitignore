@@ -1,0 +1,5 @@
+.idea/
+java/spring-petclinic/.editorconfig
+java/spring-petclinic/.travis.yml
+java/spring-petclinic/.gradle/
+java/spring-petclinic/.mvn/
