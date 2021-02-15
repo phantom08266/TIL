@@ -1,33 +1,11 @@
 package com.example.demo;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-
 public class Event {
-    Integer id;
-    @NotEmpty
-    String title;
-    @Min(0)
-    Integer size;
+    private Integer id;
+    private String title;
 
-    @Email
-    String Email;
-
-    public Integer getSize() {
-        return size;
-    }
-
-    public void setSize(Integer size) {
-        this.size = size;
-    }
-
-    public String getEmail() {
-        return Email;
-    }
-
-    public void setEmail(String email) {
-        Email = email;
+    public Event(Integer id) {
+        this.id = id;
     }
 
     public Integer getId() {
@@ -40,6 +18,14 @@ public class Event {
 
     public String getTitle() {
         return title;
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                '}';
     }
 
     public void setTitle(String title) {
