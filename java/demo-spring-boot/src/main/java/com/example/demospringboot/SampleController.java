@@ -7,16 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class SampleController {
-    @GetMapping("/hello/{name}")
-    public String hello(@PathVariable String name){
-        return "hello " + name;
-    }
-    @GetMapping("/hi/{name}")
-    public String hi(@PathVariable("name") Person person){
-        return "hi "+ person.getName();
-    }
-    @GetMapping("/check")
-    public String check(@RequestParam("test") Person person){
-        return "check " + person.getName();
+    @GetMapping("/hello")
+    public String hello(@RequestParam("id") Person person) {
+        return "hello " + person.getName();
     }
 }

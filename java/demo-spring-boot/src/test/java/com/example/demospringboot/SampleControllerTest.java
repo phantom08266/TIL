@@ -22,24 +22,18 @@ public class SampleControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    @Autowired
+    PersonRepository personRepository;
     @Test
     public void hello() throws Exception {
-        this.mockMvc.perform(get("/hello/june"))
+        Person person = new Person();
+        person.setName("june");
+        personRepository.save(person);
+
+        System.out.println(person.getName() + " " + person.getId());
+        this.mockMvc.perform(get("/hello")
+                    .param("id",person.getId().toString()))
                 .andDo(print())
                 .andExpect(content().string("hello june"));
-    }
-
-    @Test
-    public void hi() throws Exception {
-        this.mockMvc.perform(get("/hi/lee"))
-                .andDo(print())
-                .andExpect(content().string("hi lee"));
-    }
-
-    @Test
-    public void check() throws Exception {
-        this.mockMvc.perform(get("/check").param("test","lee"))
-                .andDo(print())
-                .andExpect(content().string("check lee"));
     }
 }
