@@ -27,46 +27,23 @@ public class SampleControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-
     @Test
-    public void hello() throws Exception {
-        this.mockMvc.perform(get("/events"))
+    public void eventForm() throws Exception {
+        mockMvc.perform(get("/events/form"))
                 .andDo(print())
-                .andExpect(status().isOk())
-        ;
+                .andExpect(view().name("events/form"))
+                .andExpect(model().attributeExists("event"));
     }
 
     @Test
-    public void helloNumber() throws Exception {
-        this.mockMvc.perform(get("/events/1"))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void helloPost() throws Exception {
+    public void postEvent() throws Exception {
         this.mockMvc.perform(post("/events")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+        .param("name", "june")
+        .param("limit","-10"))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("name").value("june"))
         ;
     }
 
-    @Test
-    public void helloDelete() throws Exception {
-        this.mockMvc.perform(delete("/events/1"))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void helloPut() throws Exception {
-        this.mockMvc.perform(put("/events/2")
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-        )
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
 }
