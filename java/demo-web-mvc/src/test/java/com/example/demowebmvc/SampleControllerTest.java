@@ -30,10 +30,43 @@ public class SampleControllerTest {
 
     @Test
     public void hello() throws Exception {
-        this.mockMvc.perform(get("/hello"))
+        this.mockMvc.perform(get("/events"))
                 .andDo(print())
                 .andExpect(status().isOk())
         ;
     }
 
+    @Test
+    public void helloNumber() throws Exception {
+        this.mockMvc.perform(get("/events/1"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void helloPost() throws Exception {
+        this.mockMvc.perform(post("/events")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+        ;
+    }
+
+    @Test
+    public void helloDelete() throws Exception {
+        this.mockMvc.perform(delete("/events/1"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void helloPut() throws Exception {
+        this.mockMvc.perform(put("/events/2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        )
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 }
