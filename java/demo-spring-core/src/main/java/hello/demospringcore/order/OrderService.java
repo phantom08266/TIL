@@ -1,2 +1,5 @@
-package hello.demospringcore.order;public interface OrderService {
+package hello.demospringcore.order;
+
+public interface OrderService {
+    Order createOrder(Long memberId, String itemName, int itemPrice);
 }

@@ -1,2 +1,6 @@
-package hello.demospringcore.member;public class MemberService {
+package hello.demospringcore.member;
+
+public interface MemberService {
+    void join(Member member);
+    Member findMember(Long memberId);
 }
