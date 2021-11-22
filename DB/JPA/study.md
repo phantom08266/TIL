@@ -31,4 +31,37 @@ JPA에서는 엔티티들을 메모리인 1차 캐시에 Map형태로 저장하�
 > **동일성 비교** : 자바에서 ==비교를 말하며, 객체의 인스턴스의 주소값을 비교할 때 사용한다.<br>
 > **동등성 비교** : 자바에서 equals 메서드를 사용하며, 인스턴스 주소값은 다를 수 있지만 객체 내부의 값을 비교할 때 사용한다.
 
+<br><br>
 
+# 2장 - EntityManagerFactory, EntityManager 개념정리
+
+> **Grable**, **Maven** 은 빌드관리 도구로서, 프로젝트 빌드 관리 및 라이브러리 관리기능을 한다.
+
+<br>
+
+### EntityManagerFactory
+- **EntityManagerFactory**는 JPA를 사용하기위한 공장이라고 생각하면된다.
+- 동작방식은 xml 혹은 yml로 설정한 설정값을 토대로 JPA를 동작시키기 위한 기반을 다진다.
+즉 JPA 구현체에 따라 필요하다면 DB 커넥션 풀도 생성함으로 초기 로딩하는 비용이 크다.
+그래서 보통 프로그램 시작 시 한번만 생성하고 이를 공유해서 사용한다.(프로그램 종료 시 해제해야 한다.)
+
+- EntityManagerFactory는 **Thread safe**하기 때문에 여러 Thread에서 접근하여도 **동시성 문제가 발생하지 않는다.**
+
+<br>
+
+### EntityManager
+- **EntityManager**는 JPA의 대부분의 기능들을 제공한다.(CRUD)
+- 내부적으로 DB와의 커넥션을 유지하고 있으므로 여러 Thread가 접근하여 사용하면 **동시성 문제가 발생**한다. 즉 **Thread safe하지 않다**.
+- 생성한 EntityManager는 반드시 종료해야 한다.
+
+<br>
+
+## JPQL vs SQL
+JPQL
+- Entity객체를 대상으로 쿼리
+- 대소문자를 명확히 구분한다.
+
+
+SQL 
+- DB테이블 대상으로 쿼리
+- 관례상 대소문자를 구분하지 않는다.
