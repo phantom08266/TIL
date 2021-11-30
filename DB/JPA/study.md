@@ -322,4 +322,154 @@ DB 테이블의 연관관계 설계 방법에는 크게 2가지가 있다.
 - 조인 테이블에 외래키들을 추가하고 관리한다. 
 - 별도의 테이블을 새로 만드는 것 임으로 관리포인트가 하나 더 늘어난 다는 단점이 있다.
 
+<br><br><br>
+
+# 프록시
+
+프록시가 왜 필요한지 알기 위해서는 지연로딩, 즉시로딩 개념에 대해서 알고 있어야 한다. 
+
+- 지연로딩 : 실제 사용될때 쿼리문을 DB로 전달하여 가져옴.
+- 즉시로딩 : 애플리케이션 실행 시 DB로 전달하여 가져옴.
+
+그렇다면 지연로딩은 어떻게 제공하나? 이때 나온 개념이 바로 **프록시** 이다. 
+
+<br>
+
+> 물론 프록시로만 지연로딩을 설정할 수 있는 것은 아니다. 바이트코드를 수정하는 방법도 있지만 이는 복잡함으로 프록시만 알고있어도 충분할 듯.
+
+<br>
+
+## 프록시란
+
+프록시는 실제 클래스를 상속받아서 구현되어있다. 그래서 겉 모양은 실제 클래스와 비슷하다. 상속받은 프록시 객체는 내부적으로 실제객체를 참조해서 target변수로 저장하여 실제 요청이 들어올 시, 즉 프록시 객체의 메소드를 실행 시 실제객체를 호출하여 실행한다. 
+
+<br>
+
+### 프록시 동작방식
+
+1. 프록시 메서드 호출
+2. 한번도 실제 엔티티가 생성되지 않았따면 영속성 컨텍스트에 실제 엔티티 요청(**초기화**)
+3. 영속성 컨텍스트는 실제 DB 조회
+4. 프록시 객체가 참조하는 target 변수에 저장
+5. 이후 요청은 target에 저장한 실제 entity객체를 통해서 한다.
+
+<br>
+
+### 프록시 특징
+- 프록시 객체는 처음 사용할 때 초기화한다.
+- 프록시 객체가 초기화되면 실제 Entity에 접근가능
+- 초기화는 영속성 컨텍스트의 도움을 받아야 하기 때문에 준영속성인 상태에서는 초기화할 수 없다.(만약 준영속상태에서 호출 시 LazyInitializationException 발생)
+
+<br>
+
+## 즉시로딩(EAGER)
+
+- 조회 시 연관된 Entity도 함께 조회된다.
+- JPA는 즉시로딩을 최적화 하기위해 Join을 사용한다.
+  - 별도의 설정이 없으면 기본적으로 외부조인(outer join)을 사용한다.
+  - 외부 조인을 사용하는 이유는 A가 B를 참조하고 있을 경우 B가 Null일때 내부조인 시 B뿐만 아니라 A도 검색이 안된다. 
+- `@OneToOne`, `@ManyToOne`에서 JPA는 기본전략은 **EAGER**이다.
+  
+### 외부조인
+JPA는 기본적으로 조인할때 Outer Join을 사용한다. 이는 Null이 포함될 수 있기 때문에 그렇다. 그래서 이를 사전에 방지하면 Inner Join으로 Join을 처리하도록 설정할 수 있다.
+
+- `@JoinColumn`에 nullable 값을 false로 설정한다.
+- `@ManyToOne`에 optional값을 false로 설정한다.
+
+둘중 한가지 방법을 사용하면 외부조인이었던 것을 내부조인으로 설정할 수 있다.
+외부 조인보다 내부조인이 성능상 이점이 있기 때문에 상황에 따라 내부조인으로 설정하는 것이 좋다. 
+
+<br>
+
+### 지연로딩(Lazy)
+
+```java
+Member member = em.find(Member.class, 1L);
+Team team = member.getTeam(); // 프록시 객체를 반환한다. 
+team.getTeam(); // 실제 Team 객체를 사용하여 DB에서 조회해서 초기화한다.
+```
+
+지연로딩으로 되어있으면 실제 호출되지 않는 한 select시 프록시가 들어가 있으므로 쿼리를 보면 포함되어있지 않다.
+
+컬렉션은 로딩 시 비용이 많이 들기 때문에 `@OneToMany`, `@ManyToMany` 시 기본전략이 Lazy이다. 
+
+컬렉션은 즉시로딩하는 것은 권하지는 않지만, 필요하다면 즉시로딩 시 항상 외부조인을 사용하자.
+ 
+<br><br>
+
+## 영속성 전이(CASCADE)
+
+JPA에서는 Entity를 저장할때 연관된 모든 Entity는 영속상태여야 한다. 그래서 Entity를 영속상태로 만들 때 연관된 모든 Entity도 영속상태로 만들기 위해 사용한다.
+
+<br>
+
+부모를 영속화 시 자식도 영속화 된다.
+
+<br>
+
+```java
+@Entity
+class Parent{
+
+  @OneToMany(mappedBy="parent", cascade = CascadeType.PERSIST)
+  private List<Child> children = new ArrayList<child>();
+
+}
+```
+
+> 영속성 전이는 연관관계 매핑과는 **관련이 없다**. 단지 부모를 영속화시 연결된 자식도 영속화 해주는 기능만 있다. 
+
+<br>
+
+- CascadeType.REMOVE 속성으로 부모 Entity 삭제 시 연결된 자식 Entity도 삭제되도록 설정할 수 있다. 즉 부모가 자식의 **삭제 생명주기를 관리**한다. 
+- 삭제 순서는 자식 -> 부모 순이다.
+- CascadeType.PERSIST 와  CascadeType.REMOVE를 같이 사용하면  CascadeType.ALL과 동일하다.
+- CascadeType.PERSIST, CascadeType.REMOVE는 플러시를 호출할때 영속성 전이가 발생한다.
+
+<br><br>
+
+## REMOVE 시 주의사항 
+
+```java
+Member member1 = new Member();
+Member member2 = new Member();
+Team team = new Team();
+
+team.addMember(member1);
+team.addMember(member2);
+
+teamRepository.save(team);
+
+team.getMembers().remove(0);
+
+List<Team> teams = teamRepository.findAll();
+List<Team> members = memberRepository.findAll();
+
+assertThat(teams).hasSize(1);
+assertThat(members).hasSize(2);
+```
+> CascadeType.REMOVE는 부모와 자식의 관계가 끊어져도 자식을 삭제하지 않는다. 
+> 즉 Delete 쿼리가 나가지 않는다. 
+
+<br><br>
+
+## 고아객체
+
+```java
+@OneToMaby(mappedBy="parent", orphanRemoval=true)
+```
+
+- 고아객체는 부모와 연결이 끊어져도 남아있는 자식 Entity를 말한다.
+- 자식 Entity의 참조만 제거시 자식 Entity가 자동으로 삭제된다.(CascadeType의 Remove속성의 주의사항 부분을 해결해준다.)
+- CascadeType.Remove 처럼 부모 Entity제거 시 자식 Entity도 제거해준다.
+
+<br>
+
+### 고아객체 제거 시 주의사항
+참조가 제거된 Entity는 다른 곳에서도 참조되지 않아야 한다.
+
+<br>
+
+### 영속성 전이 + 고아객체 제거 둘다 사용 시
+CascadeType.ALL + orphanRemoval = true 시 자식의 Entity 생명주기를 부모 Entity가 관리한다는 의미이다.
 
