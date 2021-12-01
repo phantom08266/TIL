@@ -324,7 +324,7 @@ DB 테이블의 연관관계 설계 방법에는 크게 2가지가 있다.
 
 <br><br><br>
 
-# 프록시
+# 8장 프록시
 
 프록시가 왜 필요한지 알기 위해서는 지연로딩, 즉시로딩 개념에 대해서 알고 있어야 한다. 
 
@@ -472,4 +472,93 @@ assertThat(members).hasSize(2);
 
 ### 영속성 전이 + 고아객체 제거 둘다 사용 시
 CascadeType.ALL + orphanRemoval = true 시 자식의 Entity 생명주기를 부모 Entity가 관리한다는 의미이다.
+
+<br><br><br>
+
+# 9장 값 타입
+
+JPA에서는 타입이 크게 2가지가 있다. 
+- Entity 타입
+- 값 타입(int, integer, string 등)
+
+이중에서 값 타입에는 3가지 종류가 있다.
+- 기본 값 타입
+- 임베디드 타입
+- 컬렉션 타입
+
+<br><br>
+
+## 임베디드 타입
+
+- 해당 엔티티가 더욱 의미있고 가독성 있도록 보이게 해준다.
+- 새로 만든 클래스에 `@Embededable`을 붙이고 사용하는 곳 에다가 `@Embedded`애노테이션을 붙인다.
+- 임베디드 타입은 기본 생성자가 필수이다.
+- 하이버네이트는 임베디드 타입을 컴포넌트라 한다.
+- 임베디드 타입은 클래스 임으로 여러 Entity에서 공유해서 사용하면 의도치않는 값 변경이 발생할 수 있다. 그러므로 값만 복사하는 별도의 clone메서드를 만들어서 사용해야 한다.
+- 값 타입은 위처럼 공유 참조 문제가 발생하지 않도록 불변객체로 만드는 것이 좋다. 즉 생성자로만 파라미터를 받아 수정하고 setter메서드를 제공하지 않는것이 좋다. 
+- 임베디드 타입은 값 비교시 객체는 인스턴스가 달라도 값이 같으면 같은 것으로 봐야 한다. 그래서 동등성 비교를 하기위해 equals메서드를 재정의 해야하며, 이때 hashcode도 같이 재정의 해야한다. 안그럼 컬렉션 사용 시 문제가 발생한다.
+
+<br><br>
+
+### @AttributeOverride 속성 재정의
+
+임베디드 타입을 하나의 Entity에서 2개 이상 사용함에 따라 컬럼명 중복이 발생한다. 이런 문제를 해결하기 위해서 `@AttributeOverride`를 사용할 수 있다.
+
+<br>
+
+```java
+@Embededable
+public class Address{
+  private String city;
+  private String street;
+  private String zipcode;
+}
+
+@Entity
+public class Member{
+  ...
+  @Embedded Address homeAddress;
+
+  @Embedded 
+  @AttributeOVerride({
+    @AttributeOverride(name="city", column=@Column(name= "COMPANY_CITY")),
+    @AttributeOverride(name="street", column=@Column(name= "COMPANY_STREET")),
+    @AttributeOverride(name="zipcode", column=@Column(name= "COMPANY_ZIPCODE"))
+    })
+  Address companyAddress;
+}
+```
+<br><br>
+
+### 값 타입 컬렉션
+
+RDB에는 컬렉션을 칼럼에 포함할수 없으므로 별도의 table을 만들어 매핑해야 한다.<br>
+`@CollctionTable`을 생략하면 기본값을 사용한다. 여기서 기본값이란 `{Entity이름}_{커렉션 속성 이름}`을 말한다.<br>
+
+
+
+```java
+@Entity
+public class Member{
+  ...
+  @ElementCollection
+  @CollctionTable(name="FAVORITE_FOODS", joinColumns = @JoinColumn(name = "MEMBER_ID"))
+  @Column(name="FOOD_NAME")
+  private Set<String> favoriteFoods = new HashSet<String>();
+  
+  @ElementCollection
+  @CollctionTable(name="FAVORITE_FOODS", joinColumns = @JoinColumn(name = "MEMBER_ID"))
+  @Column(name="FOOD_NAME")
+  private List<Address> favoriteFoods = new ArrayList<Address>();
+}
+```
+
+
+> 값 타입의 컬렉션은 기본적으로 **영속성 전이 + 고아객체 제거** 기능을 가지고 있다. @ElementCollection에 FetchType설정이 가능하다. 
+
+||Entity타입| 값 타입|
+|-|-----|--------|
+|식별자|있다| 없다|
+|생명주기|있다.(생성, 연속, 소멸)| 없다.(Entity에 의존)|
+|공유|있다.(회원 Entity를 다른 Entity에서 얼마든지 참조 가능)| 공유하지 않는게 좋다.(대신 값을 복사하는 메서드를 만들어 사용하거나 불변 객체를 만들어서 사용하는 것이 좋다.)|
 
