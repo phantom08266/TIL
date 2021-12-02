@@ -562,3 +562,130 @@ public class Member{
 |생명주기|있다.(생성, 연속, 소멸)| 없다.(Entity에 의존)|
 |공유|있다.(회원 Entity를 다른 Entity에서 얼마든지 참조 가능)| 공유하지 않는게 좋다.(대신 값을 복사하는 메서드를 만들어 사용하거나 불변 객체를 만들어서 사용하는 것이 좋다.)|
 
+<br><br><br>
+
+# 10장 JPQL
+JPA는 JPQL을 사용하여 DB 테이블 기반이 아닌 Entity 객체기반 조회를 제공한다.
+
+<br>
+
+### JPQL의 특징
+- 객체를 대상으로 검색하는 객체지향 쿼리
+- SQL을 추상화하여 특정 DB SQL에 의존하지 않는다.
+
+JPA는 JPQL뿐만 아니라 다양한 검색방법을 제공한다.
+- JPQL
+- Criteria쿼리 : JPQL을 편하게 작성하도록 도와주는 API(빌더 클래스 모음)
+- 네이티브 SQL : JPA에서 JPQL대신 직접 SQL사용
+- QueryDSL : Criteria쿼리처럼 JPQL을 편하게 작성하도록 도와주는 빌더 클래스 모음
+- JDBC 직접사용, MyBatis같은 SQL Mapper 프레임워크 사용
+
+<br>
+
+### Criteria 특징
+
+1. 컴파일 시점에 오류 발견 가능(문자열이 아닌 코드로 JPQL을 작성하기 때문)
+2. IDE를 사용하면 코드 자동완성 지원
+3. 동적 쿼리를 작성하기 편함
+
+
+다만 가독성이 떨어지고 복잡하다는 단점때문에 오픈소스 프로젝트인 QueryDSL을 사용한다.
+
+<br>
+
+### 네이티브 SQL
+직접 SQL 쿼리를 사용할 수 있도록 제공한다. 특정 DB에서만 제공하는 기능들을 사용할때 주로 사용되며, DB에 의존적인 SQL 쿼리를 작성함에따라 DB가 변경되면 쿼리도 잊지말고 수정해줘야 한다.
+
+<br>
+
+### JDBC나 MyBatis사용시 주의사항
+
+- JDBC나 MyBatis는 영속성 컨텍스트를 우회한다. 이에따라 사이드 이펙트가 발생한다.
+  - JPA에서 값을 수정한 후 아직 트랜잭션이 종료되지 않아 플러시를 하지 않았을 경우 JDBC나 MyBatis가 조회를 시도하면 수정되지 않는 이전 데이터를 조회하게되는 문제가 발생할 수 있다.
+- 따라서 조회를 하기전에 영속성 컨텍스트를 수동으로 플러시하고 가져오도록 해야한다.
+
+<br>
+
+## JPQL 사용방법
+그럼 JPQL을 어떻게 사용하는지 알아보자.<br>
+
+```
+SELECT절 FROM절
+[WHERE_절]
+[GROUPBY_절]
+[HAVING_절]
+[ORDERBY_절]
+```
+
+```
+UPDATE절 [WHERE_절]
+```
+
+```
+DELETE절 [WHERE_절]
+```
+
+> SELECT m FROM Member As m WHERE m.username="Hello"
+
+<br>
+
+### 대소문자 구분
+- Entity, 필드명은 대소문자 구분한다.
+- JPQL키워드는 대소문자 구분 안한다. (select, from , as)
+
+<br>
+
+### 별칭은 필수
+별칭은 꼭 줘야하며, 대신 AS 키워드는 사용하지 않아도 된다.
+
+<br><br>
+
+### TypeQuery, Query
+- TypeQuery : 반환 타입이 명확하면 사용한다.
+- Query : 반환 타입이 여러개거나 불명확하면 사용한다.
+
+<br><br>
+
+### 파라미터 바인딩
+JDBC는 **위치기준 파라미터** 바인딩만 지원하지만 JPQL은 **이름 기준 파라미터** 바인딩도 지원한다.
+
+- 이름 기준 파라미터 
+  - `: 파라미터 이름` 방식으로 사용
+- 위치 기준 파라미터
+  - `?숫자` 방식으로 사용하며, 숫자값은 파라미터 위치를 나타내고 1부터 시작한다.
+
+<br>
+
+위치보단 이름 기준 파라미터를 사용해야 안전하며, 이러한 파라미터 바인딩을 사용하지 않고 직접 JPQL을 만들면 **SQL 인젝션 공격** 을 당할 수 있다. 그러므로 무조건 파라미터 바인딩을 사용하여 개발하자.
+
+<br>
+
+### 프로젝션
+
+select절에 조회할 대상을 지정하는 것을 프로젝션 이라 한다.<br>
+```
+SELECT [프로젝션 대상] FROM ~
+```
+프로젝션 대상 : Entity, 임베디드 타입, 스칼라(String, int 등)
+
+- 프로젝션 대상에 **Entity**가 있다면 조회 후 영속성 컨텍스트에서 **관리된다**.
+- 프로젝션 대상에 **임베디드 타입**이 있다면 값 타입임으로 영속성 컨텍스트에서 관리되지 **않는다**.
+- 임베디드 타입을 조회의 시작점으로 할 수 없다.
+  - `SELECT a FROM Address a`
+- 중복값 제거 시 프로젝션 대상 앞에 작성한다.
+  - `SELECT DISTINCT username FROM Member m`
+- Entity대상으로 조회하면 편리하지만 꼭 필요한 데이터만 선택해서 조회할때도 있다. 이땐 Query를 사용한다.
+  
+
+```java
+TypeQuery<UserDto> query = em.createQuery("select new jpabook.jpql.userDto(m.username, m.age) from Member m", userDto.class);
+
+List<UserDto> resultList = query.getResultList();
+```
+
+Query를 통해 조회된 값을 Object를 사용하여 받는데 실무에선 이를 변환해서 별도의 DTO를 만들어서 사용한다. JPQL 내부적으로 SELECT뒤에 NEW 키워드를 붙여서 클래스 생성자에 조회결과를 넘겨주게 설정할 수 있다.
+
+**NEW 키워드를 사용 시 주의사항**
+1. 패키지 명을 포함한 전체 클래스명을 입력해야 한다.
+2. 순서와 타입이 일치하는 생성자가 필요하다.
+
