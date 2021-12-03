@@ -689,3 +689,92 @@ Query를 통해 조회된 값을 Object를 사용하여 받는데 실무에선 �
 1. 패키지 명을 포함한 전체 클래스명을 입력해야 한다.
 2. 순서와 타입이 일치하는 생성자가 필요하다.
 
+<br>
+
+## 집합과 정렬
+
+집합은 통계정보를 구할때 사용한다.
+
+|키워드|설명
+|-----|--------|
+|COUNT|결과 수 (Long 타입)|
+|MIN, MAX|문자, 숫자, 날짜 등에 사용한다.|
+|AVG | 평균값, 숫자만 가능(Double타입)|
+|SUM| 합, 숫자만 가능(Long, Double, BigInteger, BigDecimal)|
+
+<br>
+
+## Group by, Having
+
+- Group by는 통계 데이터를 구할 때 특정 그룹끼리 묶을때 사용한다.(보통 ~별 이라는 말이 들어가면 Group by를 사용하면 된다.)
+- Having은 Group by로 그룹화한 통계 데이터를 기준으로 필터링을 한다.(where와의 차이점이기도 함)
+- 이런 통계 쿼리는 전체 데이터를 기준으로 처리함으로 실시간 처리에는 부담된다. 해서 트래픽이 적은 새벽에 하는 것이 좋다.
+
+<br>
+
+## JPQL 조인
+JPQL의 조인과 SQL 쿼리 조인과의 차이점은 연관관계 필드를 사용하는 부분이 차이가 있다. 연관필드는 다른 Entity와 연관관계를 가지기 위해 사용하는 필드를 말한다.
+
+### 내부조인
+- Inner Join을 사용하며, Inner는 생략 가능하다.
+
+<br>
+
+### 외부조인
+`SELECT m FROM Member m Left [outer] Join m.team t`
+- SQL의 외부조인과 같은 기능을 한다.
+- outer는 생략 가능하다.
+
+<br>
+
+### 세타조인
+
+`SELECT COUNT(m) FROM Member m, Team t WHERE m.username=t.name`
+
+- where절을 사용해서 세타조인을 할 수 있다.
+- 내부조인만 지원한다. 
+
+<br>
+
+## Join On 절
+
+- `on`절을 사용하면 조인 대상을 필터링 할 수 있다.
+- 내부조인의 `on`절은 where절과 같으므로 외부조인에서만 사용한다.
+
+<br>
+
+## 페치조인
+
+
+`SELECT m FROM Member m Join fetch m.team`
+<br>
+m.team_id = team.Id 조건이라 보면된다.
+
+- JPQL에서 성능 최적화를 위해 제공하는 기능
+- 페치조인에는 별칭을 사용할 수 없다.
+- 연관된 Entity나 컬렉션을 함께 조회한다.
+
+<br>
+
+### 페치 조인과 DISTINCT
+
+`SELECT DISTINCT t FROM TEAM t Join Fetch t.members where t.name = "팀A"`
+
+팀 Entity의 중복을 제거하란 의미이다.
+
+<br>
+
+### 페치조인과 일반 조인의 차이
+- JPQL의 일반 조인은 연관관계를 고려하지 않고 단순 Select절에 지정한 Entity만 조회한다. 따라서 프록시나 아직 초기화 되지않은 컬렉션 래퍼를 반환한다. 
+- 그렇다고 즉시로딩으로 글로벌 로딩전략을 사용한다면 로딩 하기위한 쿼리를 한번 더 날리게 된다. 
+- 하지만 페치조인은 연관된 Entity를 같이 조회함에 따라 전달 쿼리 수를 줄 일 수 있다.
+
+<br>
+
+### 페치조인의 특징과 한계
+- SQL 호출을 줄여줘 성능을 최적화 할 수 있다.
+- Entity에 적용하는 글로벌 로딩 전략보다 페치 조인을 우선시한다.
+  - `@OneToMany(fetch = FetchType.LAZY)`
+- 그래서 클로벌 로딩전략인 LAZY로 모두 설정한 뒤 나중에 성능향상이 필요한 부분에 페치조인을 사용하는 것이 좋다. 
+
+
