@@ -208,3 +208,22 @@ URI는 리소스만 식별<br>
 > 즉 A사용자가 Get을 할때 B라는 사용자가 값을 변경하면 Get의 데이터가 변경되지만 이는 다른 사용자임으로 멱등을 보장하지 않는다.
 - 캐시가능(Cacheable Methods)
   - Get, Head 정도만 캐시로 사용한다. (POST, PATCH도 캐시를 쓸수는 있다. 구현이 쉽지않을뿐)
+
+<br><br><br>
+
+## HTTP Api 설계 방법
+
+1. 우선 리소스만 가지고 api를 설계한다.
+2. 하지만 여러 복잡한 요구사항을 해결하기 위해서는 리소스만으로 해결할 수 없다. 이때는 **컨트롤 URI**를 사용한다.
+
+<br>
+
+### 컨트롤 URI
+HTML에서 Form데이터를 전송하려면 Http 메서드 중 **Get, Post** 만 사용 가능하다.<br>
+Put, Delete, Patch 등의 메서드를 사용할 수 없으므로 리소스 만으로는 Api를 설계하기 힘들다. <br>
+따라서 이럴때 사용하는 것이 **컨트롤 URI** 이다. 
+컨트롤 URI는 **동사를 직접 사용**하는 URI를 말한다.
+
+> ex) /members/{id}/delete, /members/{id}/edit, /members/{id}/new
+
+참고자료 : https://restfulapi.net/resource-naming/
