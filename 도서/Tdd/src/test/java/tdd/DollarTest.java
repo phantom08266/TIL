@@ -11,8 +11,18 @@ class DollarTest {
     @DisplayName("$5 * 2 = $10이 되어야 한다.")
     void test1() {
         Dollar five = new Dollar(5);
-        five.times(2);
-        assertThat(10).isEqualTo(five.amount);
+        Dollar product = five.times(2);
+        assertThat(10).isEqualTo(product.amount);
+    }
+
+    @Test
+    @DisplayName("Dollar값은 이전 계산 후 변경되지 않아야 한다.")
+    void test2() {
+        Dollar five = new Dollar(5);
+        Dollar product = five.times(2);
+        assertThat(10).isEqualTo(product.amount);
+        product = five.times(3);
+        assertThat(15).isEqualTo(product.amount);
     }
 
 }
