@@ -276,3 +276,505 @@ em.merge(Entity)
 - 두 테이블 중 누구나 외래키를 가질 수 있다.
 - 개발자들은 주로 주 테이블에 외래키를 두는 것을 선호한다.
 - 주 테이블에 외래키를 두면 단방향, 양방향 다 가능하지만, 대상 테이블에 외래키를 두면 양방향 맵핑으로만 가능하다. 
+
+<br><br><br>
+
+# 7장 고급매핑
+
+DB에서는 상속이란 개념은 없다. 대신 슈퍼타입, 서브타입 관계라는 모델링 기법이 존재한다. 해서 JPA는 해당 모델링 기법을 상속과 매핑하였다.
+
+<br>
+
+
+- `조인전략` : Entity 각각을 Table로 만들고 부모 테일블의 PK를 자식테이블에서 받아 외래키로 사용하는 전략, 이때 부모 테이블에서는 자식들을 구분지을 **타입칼럼** 추가로 필요하다.
+- `단일 테이블 전략` : 테이블 하나에 부모테이블과 자식테이블의 내용을 모두 집어넣어 사용하는 전략. 별도의 Join 쿼리가 불필요하며 속도가 가장 빠르다. 대신 단점으로는 필요 이상으로 테이블이 커질 수 있으며, 자식 테이블의 칼럼들은 모두 Null을 허용해야 한다.
+- `구현 클래스마다 테이블 전략` : 자식 테이블 각각 필요한 칼럼을 작성한다. 추천하지 않음. 
+
+<br><br>
+
+## @MappedSuperclass 
+DB 테이블과 매핑하는 것이 아니라 단순히 매핑 정보를 상속할 목적으로만 사용한다.
+즉 공통의 속성들을 모아둔 클래스를 만들어 이를 각각의 Entity가 상속받아 사용할 수 있도록 한다. 
+
+> 만약 부모로부터 받은 매핑정보를 변경하려면 @AttributeOvveride나 @AttributeOvverides를 사용한다.
+
+<br>
+@MappedSuperclass로 지정한 클래스는 Entity가 아닌 단순 클래스 임으로 JPQL이나 em.find로 사용할 수 없다. 즉 영속화 되어있지 않는 클래스 이다. 
+
+<br>
+Entity는 Entity나 @MappedSuperclass로 설정된 클래스만 상속받을 수 있다.
+
+<br><br>
+
+## 조인테이블
+DB 테이블의 연관관계 설계 방법에는 크게 2가지가 있다. 
+1. `@JoinColumn`을 사용하는 방법
+2. `@JoinTable`을 사용하는 방법
+
+### @JoinColumn
+- name의 값으로 외래키 이름을 설정한다.
+- 외래키에 null 값이 들어갈 수 있다.
+- 그래서 내부조인이 아닌 외부조인을 사용해야 한다.
+- 내부조인을 사용하면 null일때에는 조회되지 않는다.
+
+### @JoinTable
+- 조인 테이블이라는 별도의 테이블을 새로 생성한다. 
+- 조인 테이블에 외래키들을 추가하고 관리한다. 
+- 별도의 테이블을 새로 만드는 것 임으로 관리포인트가 하나 더 늘어난 다는 단점이 있다.
+
+<br><br><br>
+
+# 8장 프록시
+
+프록시가 왜 필요한지 알기 위해서는 지연로딩, 즉시로딩 개념에 대해서 알고 있어야 한다. 
+
+- 지연로딩 : 실제 사용될때 쿼리문을 DB로 전달하여 가져옴.
+- 즉시로딩 : 애플리케이션 실행 시 DB로 전달하여 가져옴.
+
+그렇다면 지연로딩은 어떻게 제공하나? 이때 나온 개념이 바로 **프록시** 이다. 
+
+<br>
+
+> 물론 프록시로만 지연로딩을 설정할 수 있는 것은 아니다. 바이트코드를 수정하는 방법도 있지만 이는 복잡함으로 프록시만 알고있어도 충분할 듯.
+
+<br>
+
+## 프록시란
+
+프록시는 실제 클래스를 상속받아서 구현되어있다. 그래서 겉 모양은 실제 클래스와 비슷하다. 상속받은 프록시 객체는 내부적으로 실제객체를 참조해서 target변수로 저장하여 실제 요청이 들어올 시, 즉 프록시 객체의 메소드를 실행 시 실제객체를 호출하여 실행한다. 
+
+<br>
+
+### 프록시 동작방식
+
+1. 프록시 메서드 호출
+2. 한번도 실제 엔티티가 생성되지 않았따면 영속성 컨텍스트에 실제 엔티티 요청(**초기화**)
+3. 영속성 컨텍스트는 실제 DB 조회
+4. 프록시 객체가 참조하는 target 변수에 저장
+5. 이후 요청은 target에 저장한 실제 entity객체를 통해서 한다.
+
+<br>
+
+### 프록시 특징
+- 프록시 객체는 처음 사용할 때 초기화한다.
+- 프록시 객체가 초기화되면 실제 Entity에 접근가능
+- 초기화는 영속성 컨텍스트의 도움을 받아야 하기 때문에 준영속성인 상태에서는 초기화할 수 없다.(만약 준영속상태에서 호출 시 LazyInitializationException 발생)
+
+<br>
+
+## 즉시로딩(EAGER)
+
+- 조회 시 연관된 Entity도 함께 조회된다.
+- JPA는 즉시로딩을 최적화 하기위해 Join을 사용한다.
+  - 별도의 설정이 없으면 기본적으로 외부조인(outer join)을 사용한다.
+  - 외부 조인을 사용하는 이유는 A가 B를 참조하고 있을 경우 B가 Null일때 내부조인 시 B뿐만 아니라 A도 검색이 안된다. 
+- `@OneToOne`, `@ManyToOne`에서 JPA는 기본전략은 **EAGER**이다.
+  
+### 외부조인
+JPA는 기본적으로 조인할때 Outer Join을 사용한다. 이는 Null이 포함될 수 있기 때문에 그렇다. 그래서 이를 사전에 방지하면 Inner Join으로 Join을 처리하도록 설정할 수 있다.
+
+- `@JoinColumn`에 nullable 값을 false로 설정한다.
+- `@ManyToOne`에 optional값을 false로 설정한다.
+
+둘중 한가지 방법을 사용하면 외부조인이었던 것을 내부조인으로 설정할 수 있다.
+외부 조인보다 내부조인이 성능상 이점이 있기 때문에 상황에 따라 내부조인으로 설정하는 것이 좋다. 
+
+<br>
+
+### 지연로딩(Lazy)
+
+```java
+Member member = em.find(Member.class, 1L);
+Team team = member.getTeam(); // 프록시 객체를 반환한다. 
+team.getTeam(); // 실제 Team 객체를 사용하여 DB에서 조회해서 초기화한다.
+```
+
+지연로딩으로 되어있으면 실제 호출되지 않는 한 select시 프록시가 들어가 있으므로 쿼리를 보면 포함되어있지 않다.
+
+컬렉션은 로딩 시 비용이 많이 들기 때문에 `@OneToMany`, `@ManyToMany` 시 기본전략이 Lazy이다. 
+
+컬렉션은 즉시로딩하는 것은 권하지는 않지만, 필요하다면 즉시로딩 시 항상 외부조인을 사용하자.
+ 
+<br><br>
+
+## 영속성 전이(CASCADE)
+
+JPA에서는 Entity를 저장할때 연관된 모든 Entity는 영속상태여야 한다. 그래서 Entity를 영속상태로 만들 때 연관된 모든 Entity도 영속상태로 만들기 위해 사용한다.
+
+<br>
+
+부모를 영속화 시 자식도 영속화 된다.
+
+<br>
+
+```java
+@Entity
+class Parent{
+
+  @OneToMany(mappedBy="parent", cascade = CascadeType.PERSIST)
+  private List<Child> children = new ArrayList<child>();
+
+}
+```
+
+> 영속성 전이는 연관관계 매핑과는 **관련이 없다**. 단지 부모를 영속화시 연결된 자식도 영속화 해주는 기능만 있다. 
+
+<br>
+
+- CascadeType.REMOVE 속성으로 부모 Entity 삭제 시 연결된 자식 Entity도 삭제되도록 설정할 수 있다. 즉 부모가 자식의 **삭제 생명주기를 관리**한다. 
+- 삭제 순서는 자식 -> 부모 순이다.
+- CascadeType.PERSIST 와  CascadeType.REMOVE를 같이 사용하면  CascadeType.ALL과 동일하다.
+- CascadeType.PERSIST, CascadeType.REMOVE는 플러시를 호출할때 영속성 전이가 발생한다.
+
+<br><br>
+
+## REMOVE 시 주의사항 
+
+```java
+Member member1 = new Member();
+Member member2 = new Member();
+Team team = new Team();
+
+team.addMember(member1);
+team.addMember(member2);
+
+teamRepository.save(team);
+
+team.getMembers().remove(0);
+
+List<Team> teams = teamRepository.findAll();
+List<Team> members = memberRepository.findAll();
+
+assertThat(teams).hasSize(1);
+assertThat(members).hasSize(2);
+```
+> CascadeType.REMOVE는 부모와 자식의 관계가 끊어져도 자식을 삭제하지 않는다. 
+> 즉 Delete 쿼리가 나가지 않는다. 
+
+<br><br>
+
+## 고아객체
+
+```java
+@OneToMaby(mappedBy="parent", orphanRemoval=true)
+```
+
+- 고아객체는 부모와 연결이 끊어져도 남아있는 자식 Entity를 말한다.
+- 자식 Entity의 참조만 제거시 자식 Entity가 자동으로 삭제된다.(CascadeType의 Remove속성의 주의사항 부분을 해결해준다.)
+- CascadeType.Remove 처럼 부모 Entity제거 시 자식 Entity도 제거해준다.
+
+<br>
+
+### 고아객체 제거 시 주의사항
+참조가 제거된 Entity는 다른 곳에서도 참조되지 않아야 한다.
+
+<br>
+
+### 영속성 전이 + 고아객체 제거 둘다 사용 시
+CascadeType.ALL + orphanRemoval = true 시 자식의 Entity 생명주기를 부모 Entity가 관리한다는 의미이다.
+
+<br><br><br>
+
+# 9장 값 타입
+
+JPA에서는 타입이 크게 2가지가 있다. 
+- Entity 타입
+- 값 타입(int, integer, string 등)
+
+이중에서 값 타입에는 3가지 종류가 있다.
+- 기본 값 타입
+- 임베디드 타입
+- 컬렉션 타입
+
+<br><br>
+
+## 임베디드 타입
+
+- 해당 엔티티가 더욱 의미있고 가독성 있도록 보이게 해준다.
+- 새로 만든 클래스에 `@Embededable`을 붙이고 사용하는 곳 에다가 `@Embedded`애노테이션을 붙인다.
+- 임베디드 타입은 기본 생성자가 필수이다.
+- 하이버네이트는 임베디드 타입을 컴포넌트라 한다.
+- 임베디드 타입은 클래스 임으로 여러 Entity에서 공유해서 사용하면 의도치않는 값 변경이 발생할 수 있다. 그러므로 값만 복사하는 별도의 clone메서드를 만들어서 사용해야 한다.
+- 값 타입은 위처럼 공유 참조 문제가 발생하지 않도록 불변객체로 만드는 것이 좋다. 즉 생성자로만 파라미터를 받아 수정하고 setter메서드를 제공하지 않는것이 좋다. 
+- 임베디드 타입은 값 비교시 객체는 인스턴스가 달라도 값이 같으면 같은 것으로 봐야 한다. 그래서 동등성 비교를 하기위해 equals메서드를 재정의 해야하며, 이때 hashcode도 같이 재정의 해야한다. 안그럼 컬렉션 사용 시 문제가 발생한다.
+
+<br><br>
+
+### @AttributeOverride 속성 재정의
+
+임베디드 타입을 하나의 Entity에서 2개 이상 사용함에 따라 컬럼명 중복이 발생한다. 이런 문제를 해결하기 위해서 `@AttributeOverride`를 사용할 수 있다.
+
+<br>
+
+```java
+@Embededable
+public class Address{
+  private String city;
+  private String street;
+  private String zipcode;
+}
+
+@Entity
+public class Member{
+  ...
+  @Embedded Address homeAddress;
+
+  @Embedded 
+  @AttributeOVerride({
+    @AttributeOverride(name="city", column=@Column(name= "COMPANY_CITY")),
+    @AttributeOverride(name="street", column=@Column(name= "COMPANY_STREET")),
+    @AttributeOverride(name="zipcode", column=@Column(name= "COMPANY_ZIPCODE"))
+    })
+  Address companyAddress;
+}
+```
+<br><br>
+
+### 값 타입 컬렉션
+
+RDB에는 컬렉션을 칼럼에 포함할수 없으므로 별도의 table을 만들어 매핑해야 한다.<br>
+`@CollctionTable`을 생략하면 기본값을 사용한다. 여기서 기본값이란 `{Entity이름}_{커렉션 속성 이름}`을 말한다.<br>
+
+
+
+```java
+@Entity
+public class Member{
+  ...
+  @ElementCollection
+  @CollctionTable(name="FAVORITE_FOODS", joinColumns = @JoinColumn(name = "MEMBER_ID"))
+  @Column(name="FOOD_NAME")
+  private Set<String> favoriteFoods = new HashSet<String>();
+  
+  @ElementCollection
+  @CollctionTable(name="FAVORITE_FOODS", joinColumns = @JoinColumn(name = "MEMBER_ID"))
+  @Column(name="FOOD_NAME")
+  private List<Address> favoriteFoods = new ArrayList<Address>();
+}
+```
+
+
+> 값 타입의 컬렉션은 기본적으로 **영속성 전이 + 고아객체 제거** 기능을 가지고 있다. @ElementCollection에 FetchType설정이 가능하다. 
+
+||Entity타입| 값 타입|
+|-|-----|--------|
+|식별자|있다| 없다|
+|생명주기|있다.(생성, 연속, 소멸)| 없다.(Entity에 의존)|
+|공유|있다.(회원 Entity를 다른 Entity에서 얼마든지 참조 가능)| 공유하지 않는게 좋다.(대신 값을 복사하는 메서드를 만들어 사용하거나 불변 객체를 만들어서 사용하는 것이 좋다.)|
+
+<br><br><br>
+
+# 10장 JPQL
+JPA는 JPQL을 사용하여 DB 테이블 기반이 아닌 Entity 객체기반 조회를 제공한다.
+
+<br>
+
+### JPQL의 특징
+- 객체를 대상으로 검색하는 객체지향 쿼리
+- SQL을 추상화하여 특정 DB SQL에 의존하지 않는다.
+
+JPA는 JPQL뿐만 아니라 다양한 검색방법을 제공한다.
+- JPQL
+- Criteria쿼리 : JPQL을 편하게 작성하도록 도와주는 API(빌더 클래스 모음)
+- 네이티브 SQL : JPA에서 JPQL대신 직접 SQL사용
+- QueryDSL : Criteria쿼리처럼 JPQL을 편하게 작성하도록 도와주는 빌더 클래스 모음
+- JDBC 직접사용, MyBatis같은 SQL Mapper 프레임워크 사용
+
+<br>
+
+### Criteria 특징
+
+1. 컴파일 시점에 오류 발견 가능(문자열이 아닌 코드로 JPQL을 작성하기 때문)
+2. IDE를 사용하면 코드 자동완성 지원
+3. 동적 쿼리를 작성하기 편함
+
+
+다만 가독성이 떨어지고 복잡하다는 단점때문에 오픈소스 프로젝트인 QueryDSL을 사용한다.
+
+<br>
+
+### 네이티브 SQL
+직접 SQL 쿼리를 사용할 수 있도록 제공한다. 특정 DB에서만 제공하는 기능들을 사용할때 주로 사용되며, DB에 의존적인 SQL 쿼리를 작성함에따라 DB가 변경되면 쿼리도 잊지말고 수정해줘야 한다.
+
+<br>
+
+### JDBC나 MyBatis사용시 주의사항
+
+- JDBC나 MyBatis는 영속성 컨텍스트를 우회한다. 이에따라 사이드 이펙트가 발생한다.
+  - JPA에서 값을 수정한 후 아직 트랜잭션이 종료되지 않아 플러시를 하지 않았을 경우 JDBC나 MyBatis가 조회를 시도하면 수정되지 않는 이전 데이터를 조회하게되는 문제가 발생할 수 있다.
+- 따라서 조회를 하기전에 영속성 컨텍스트를 수동으로 플러시하고 가져오도록 해야한다.
+
+<br>
+
+## JPQL 사용방법
+그럼 JPQL을 어떻게 사용하는지 알아보자.<br>
+
+```
+SELECT절 FROM절
+[WHERE_절]
+[GROUPBY_절]
+[HAVING_절]
+[ORDERBY_절]
+```
+
+```
+UPDATE절 [WHERE_절]
+```
+
+```
+DELETE절 [WHERE_절]
+```
+
+> SELECT m FROM Member As m WHERE m.username="Hello"
+
+<br>
+
+### 대소문자 구분
+- Entity, 필드명은 대소문자 구분한다.
+- JPQL키워드는 대소문자 구분 안한다. (select, from , as)
+
+<br>
+
+### 별칭은 필수
+별칭은 꼭 줘야하며, 대신 AS 키워드는 사용하지 않아도 된다.
+
+<br><br>
+
+### TypeQuery, Query
+- TypeQuery : 반환 타입이 명확하면 사용한다.
+- Query : 반환 타입이 여러개거나 불명확하면 사용한다.
+
+<br><br>
+
+### 파라미터 바인딩
+JDBC는 **위치기준 파라미터** 바인딩만 지원하지만 JPQL은 **이름 기준 파라미터** 바인딩도 지원한다.
+
+- 이름 기준 파라미터 
+  - `: 파라미터 이름` 방식으로 사용
+- 위치 기준 파라미터
+  - `?숫자` 방식으로 사용하며, 숫자값은 파라미터 위치를 나타내고 1부터 시작한다.
+
+<br>
+
+위치보단 이름 기준 파라미터를 사용해야 안전하며, 이러한 파라미터 바인딩을 사용하지 않고 직접 JPQL을 만들면 **SQL 인젝션 공격** 을 당할 수 있다. 그러므로 무조건 파라미터 바인딩을 사용하여 개발하자.
+
+<br>
+
+### 프로젝션
+
+select절에 조회할 대상을 지정하는 것을 프로젝션 이라 한다.<br>
+```
+SELECT [프로젝션 대상] FROM ~
+```
+프로젝션 대상 : Entity, 임베디드 타입, 스칼라(String, int 등)
+
+- 프로젝션 대상에 **Entity**가 있다면 조회 후 영속성 컨텍스트에서 **관리된다**.
+- 프로젝션 대상에 **임베디드 타입**이 있다면 값 타입임으로 영속성 컨텍스트에서 관리되지 **않는다**.
+- 임베디드 타입을 조회의 시작점으로 할 수 없다.
+  - `SELECT a FROM Address a`
+- 중복값 제거 시 프로젝션 대상 앞에 작성한다.
+  - `SELECT DISTINCT username FROM Member m`
+- Entity대상으로 조회하면 편리하지만 꼭 필요한 데이터만 선택해서 조회할때도 있다. 이땐 Query를 사용한다.
+  
+
+```java
+TypeQuery<UserDto> query = em.createQuery("select new jpabook.jpql.userDto(m.username, m.age) from Member m", userDto.class);
+
+List<UserDto> resultList = query.getResultList();
+```
+
+Query를 통해 조회된 값을 Object를 사용하여 받는데 실무에선 이를 변환해서 별도의 DTO를 만들어서 사용한다. JPQL 내부적으로 SELECT뒤에 NEW 키워드를 붙여서 클래스 생성자에 조회결과를 넘겨주게 설정할 수 있다.
+
+**NEW 키워드를 사용 시 주의사항**
+1. 패키지 명을 포함한 전체 클래스명을 입력해야 한다.
+2. 순서와 타입이 일치하는 생성자가 필요하다.
+
+<br>
+
+## 집합과 정렬
+
+집합은 통계정보를 구할때 사용한다.
+
+|키워드|설명
+|-----|--------|
+|COUNT|결과 수 (Long 타입)|
+|MIN, MAX|문자, 숫자, 날짜 등에 사용한다.|
+|AVG | 평균값, 숫자만 가능(Double타입)|
+|SUM| 합, 숫자만 가능(Long, Double, BigInteger, BigDecimal)|
+
+<br>
+
+## Group by, Having
+
+- Group by는 통계 데이터를 구할 때 특정 그룹끼리 묶을때 사용한다.(보통 ~별 이라는 말이 들어가면 Group by를 사용하면 된다.)
+- Having은 Group by로 그룹화한 통계 데이터를 기준으로 필터링을 한다.(where와의 차이점이기도 함)
+- 이런 통계 쿼리는 전체 데이터를 기준으로 처리함으로 실시간 처리에는 부담된다. 해서 트래픽이 적은 새벽에 하는 것이 좋다.
+
+<br>
+
+## JPQL 조인
+JPQL의 조인과 SQL 쿼리 조인과의 차이점은 연관관계 필드를 사용하는 부분이 차이가 있다. 연관필드는 다른 Entity와 연관관계를 가지기 위해 사용하는 필드를 말한다.
+
+### 내부조인
+- Inner Join을 사용하며, Inner는 생략 가능하다.
+
+<br>
+
+### 외부조인
+`SELECT m FROM Member m Left [outer] Join m.team t`
+- SQL의 외부조인과 같은 기능을 한다.
+- outer는 생략 가능하다.
+
+<br>
+
+### 세타조인
+
+`SELECT COUNT(m) FROM Member m, Team t WHERE m.username=t.name`
+
+- where절을 사용해서 세타조인을 할 수 있다.
+- 내부조인만 지원한다. 
+
+<br>
+
+## Join On 절
+
+- `on`절을 사용하면 조인 대상을 필터링 할 수 있다.
+- 내부조인의 `on`절은 where절과 같으므로 외부조인에서만 사용한다.
+
+<br>
+
+## 페치조인
+
+
+`SELECT m FROM Member m Join fetch m.team`
+<br>
+m.team_id = team.Id 조건이라 보면된다.
+
+- JPQL에서 성능 최적화를 위해 제공하는 기능
+- 페치조인에는 별칭을 사용할 수 없다.
+- 연관된 Entity나 컬렉션을 함께 조회한다.
+
+<br>
+
+### 페치 조인과 DISTINCT
+
+`SELECT DISTINCT t FROM TEAM t Join Fetch t.members where t.name = "팀A"`
+
+팀 Entity의 중복을 제거하란 의미이다.
+
+<br>
+
+### 페치조인과 일반 조인의 차이
+- JPQL의 일반 조인은 연관관계를 고려하지 않고 단순 Select절에 지정한 Entity만 조회한다. 따라서 프록시나 아직 초기화 되지않은 컬렉션 래퍼를 반환한다. 
+- 그렇다고 즉시로딩으로 글로벌 로딩전략을 사용한다면 로딩 하기위한 쿼리를 한번 더 날리게 된다. 
+- 하지만 페치조인은 연관된 Entity를 같이 조회함에 따라 전달 쿼리 수를 줄 일 수 있다.
+
+<br>
+
+### 페치조인의 특징과 한계
+- SQL 호출을 줄여줘 성능을 최적화 할 수 있다.
+- Entity에 적용하는 글로벌 로딩 전략보다 페치 조인을 우선시한다.
+  - `@OneToMany(fetch = FetchType.LAZY)`
+- 그래서 클로벌 로딩전략인 LAZY로 모두 설정한 뒤 나중에 성능향상이 필요한 부분에 페치조인을 사용하는 것이 좋다. 
+
+
