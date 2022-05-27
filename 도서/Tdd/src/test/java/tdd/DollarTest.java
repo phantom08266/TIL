@@ -25,4 +25,10 @@ class DollarTest {
         assertThat(15).isEqualTo(product.amount);
     }
 
+    @Test
+    @DisplayName("동일 Dollar값을 가진 경우 Dollar객체는 동일하다")
+    void test3() {
+        assertThat(new Dollar(5)).isEqualTo(new Dollar(5));
+        assertThat(new Dollar(5)).isNotEqualTo(new Dollar(6));
+    }
 }
