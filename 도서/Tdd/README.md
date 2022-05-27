@@ -30,7 +30,11 @@ TDD로 개발을 하지 않는 부분들은 할 수 없다고 판단했기 때�
 3. amount를 private으로 만들기
 4. ~~Dollar 부작용 (side effect)~~ <br>
    ~~=> Dollar값은 이전 계산 후 변경되지 않아야 한다.~~
-5. Money 반올림?
+5. Money 반올림? 
+6. equals
+7. hashCode(Dollar를 해시 테이블의 키로 사용할때 사용)
+8. Equal null
+9. Equal object
 
 ## [1장] 다중 통화를 지원하는 Money 객체
 
