@@ -12,7 +12,7 @@ class DollarTest {
     void test1() {
         Dollar five = new Dollar(5);
         Dollar product = five.times(2);
-        assertThat(10).isEqualTo(product.amount);
+        assertThat(new Dollar(10)).isEqualTo(product);
     }
 
     @Test
@@ -20,9 +20,9 @@ class DollarTest {
     void test2() {
         Dollar five = new Dollar(5);
         Dollar product = five.times(2);
-        assertThat(10).isEqualTo(product.amount);
+        assertThat(new Dollar(10)).isEqualTo(product);
         product = five.times(3);
-        assertThat(15).isEqualTo(product.amount);
+        assertThat(new Dollar(15)).isEqualTo(product);
     }
 
     @Test
