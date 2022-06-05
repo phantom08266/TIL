@@ -22,4 +22,10 @@ class FrancTest {
         assertThat(new Franc(5)).isEqualTo(new Franc(5));
         assertThat(new Franc(5)).isNotEqualTo(new Franc(6));
     }
+
+    @Test
+    @DisplayName("Dollar와 Franc는 같지 않다")
+    void test3() {
+        assertThat(new Dollar(5)).isNotEqualTo(new Franc(5));
+    }
 }
