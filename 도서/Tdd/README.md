@@ -40,7 +40,13 @@ TDD로 개발을 하지 않는 부분들은 할 수 없다고 판단했기 때�
 ## 책 내용정리
 
 ### 📌 [(1장) 다중 통화를 지원하는 Money 객체](https://github.com/phantom08266/TIL/wiki/%5B1%EC%9E%A5%5D-%EB%8B%A4%EC%A4%91-%ED%86%B5%ED%99%94%EB%A5%BC-%EC%A7%80%EC%9B%90%ED%95%98%EB%8A%94-Money-%EA%B0%9D%EC%B2%B4)
+- TDD를 진행하는 방법
 ### 📌 [(2장) 타락한 객체](https://github.com/phantom08266/TIL/wiki/%5B2%EC%9E%A5%5D-%ED%83%80%EB%9D%BD%ED%95%9C-%EA%B0%9D%EC%B2%B4)
+-  TDD vs ADD
 ### 📌 [(3장) 모두를 위한 평등](https://github.com/phantom08266/TIL/wiki/%5B3%EC%9E%A5%5D-%EB%AA%A8%EB%91%90%EB%A5%BC-%EC%9C%84%ED%95%9C-%ED%8F%89%EB%93%B1)
+- Value of Pattern
+- 동일성 vs 동등성
 ### 📌 [(4장) 프라이버시](https://github.com/phantom08266/TIL/wiki/%5B4%EC%9E%A5%5D-%ED%94%84%EB%9D%BC%EC%9D%B4%EB%B2%84%EC%8B%9C)
-
+- 테스트 코드작성 시 주의사항
+### 📌 [(5장) 솔직히 말하자면](https://github.com/phantom08266/TIL/wiki/%5B5%EC%9E%A5%5D-%EC%86%94%EC%A7%81%ED%9E%88-%EB%A7%90%ED%95%98%EC%9E%90%EB%A9%B4)
+- 테스트 코드의 중요성 및 복붙시 주의사항
