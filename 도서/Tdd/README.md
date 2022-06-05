@@ -35,7 +35,7 @@ TDD로 개발을 하지 않는 부분들은 할 수 없다고 판단했기 때�
 7. hashCode(Dollar를 해시 테이블의 키로 사용할때 사용)
 8. Equal null
 9. Equal object
-10. 5CHF * 2 = 10CHF
+10. ~~5CHF * 2 = 10CHF~~
 
 ## 책 내용정리
 
