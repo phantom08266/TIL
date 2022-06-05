@@ -56,3 +56,5 @@ TDD로 개발을 하지 않는 부분들은 할 수 없다고 판단했기 때�
 - 테스트 코드의 중요성 및 복붙시 주의사항
 ### 📌 [(6장) 돌아온 '모두를 위한 평등'](https://github.com/phantom08266/TIL/wiki/%5B6%EC%9E%A5%5D-%EB%8F%8C%EC%95%84%EC%98%A8-'%EB%AA%A8%EB%91%90%EB%A5%BC-%EC%9C%84%ED%95%9C-%ED%8F%89%EB%93%B1')
 - 공통의 기능을 상위 클래스로 옮기는 방법
+### 📌 [(7장) 사과와 오렌지](https://github.com/phantom08266/TIL/wiki/%5B7%EC%9E%A5%5D-%EC%82%AC%EA%B3%BC%EC%99%80-%EC%98%A4%EB%A0%8C%EC%A7%80)
+- getClass()를 사용한 클래스 비교
