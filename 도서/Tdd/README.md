@@ -59,3 +59,5 @@ TDD로 개발을 하지 않는 부분들은 할 수 없다고 판단했기 때�
 - 공통의 기능을 상위 클래스로 옮기는 방법
 ### 📌 [(7장) 사과와 오렌지](https://github.com/phantom08266/TIL/wiki/%5B7%EC%9E%A5%5D-%EC%82%AC%EA%B3%BC%EC%99%80-%EC%98%A4%EB%A0%8C%EC%A7%80)
 - getClass()를 사용한 클래스 비교
+### 📌 [(8장) 객체 만들기](https://github.com/phantom08266/TIL/wiki/%5B8%EC%9E%A5%5D-%EA%B0%9D%EC%B2%B4-%EB%A7%8C%EB%93%A4%EA%B8%B0)
+- 정적 팩토리 메서드
