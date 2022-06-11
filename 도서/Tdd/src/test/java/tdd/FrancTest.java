@@ -27,4 +27,9 @@ class FrancTest {
     void test3() {
         assertThat(Money.dollar(5)).isNotEqualTo(Money.franc(5));
     }
+
+    @Test
+    void testDifferenctClassEquality() {
+        assertThat(new Money(10, "CHF")).isEqualTo(new Franc(10, "CHF"));
+    }
 }
