@@ -36,12 +36,12 @@ TDD로 개발을 하지 않는 부분들은 할 수 없다고 판단했기 때�
 8. Equal null
 9. Equal object
 10. ~~5CHF * 2 = 10CHF~~
-11. Dollar, Franc 중복
+11. ~~Dollar, Franc 중복~~
 12. ~~공용 equals~~
 13. ~~공용 times~~
 14. ~~Franc와 Dollar 비교하기~~
 15. ~~통화~~
-16. testFrancMultiplication을 지워야 할까?
+16. ~~testFrancMultiplication을 지워야 할까?~~
 ## 책 내용정리
 
 ### 📌 [(1장) 다중 통화를 지원하는 Money 객체](https://github.com/phantom08266/TIL/wiki/%5B1%EC%9E%A5%5D-%EB%8B%A4%EC%A4%91-%ED%86%B5%ED%99%94%EB%A5%BC-%EC%A7%80%EC%9B%90%ED%95%98%EB%8A%94-Money-%EA%B0%9D%EC%B2%B4)
