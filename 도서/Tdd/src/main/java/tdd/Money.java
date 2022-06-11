@@ -20,7 +20,9 @@ public abstract class Money {
 
     public abstract Money times(int multiplier);
 
-    public abstract String currency();
+    public String currency() {
+        return currency;
+    }
 
     @Override
     public boolean equals(Object obj) {
