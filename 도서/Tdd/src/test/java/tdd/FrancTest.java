@@ -16,20 +16,8 @@ class FrancTest {
     }
 
     @Test
-    @DisplayName("동일 Franc값을 가진 경우 Franc객체는 동일하다")
-    void test2() {
-        assertThat(Money.franc(5)).isEqualTo(Money.franc(5));
-        assertThat(Money.franc(5)).isNotEqualTo(Money.franc(6));
-    }
-
-    @Test
     @DisplayName("Dollar와 Franc는 같지 않다")
-    void test3() {
+    void test2() {
         assertThat(Money.dollar(5)).isNotEqualTo(Money.franc(5));
-    }
-
-    @Test
-    void testDifferenctClassEquality() {
-        assertThat(new Money(10, "CHF")).isEqualTo(new Franc(10, "CHF"));
     }
 }
