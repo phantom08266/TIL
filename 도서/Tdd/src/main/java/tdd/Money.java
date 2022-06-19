@@ -22,6 +22,11 @@ public class Money implements Expression{
         return new Money(amount * multiplier, currency);
     }
 
+    @Override
+    public Money reduce(String to) {
+        return this;
+    }
+
     public String currency() {
         return currency;
     }
