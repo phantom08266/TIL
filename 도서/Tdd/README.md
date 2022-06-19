@@ -66,3 +66,5 @@ TDD로 개발을 하지 않는 부분들은 할 수 없다고 판단했기 때�
 - 정적 팩토리 메서드
 ### 📌 9장 ~ 12장
 - 소스코드, Todo List만 작성
+### 📌 [(13장) 객체 만들기](https://github.com/phantom08266/TIL/wiki/%5B13%EC%9E%A5%5D-%EC%A7%84%EC%A7%9C%EB%A1%9C-%EB%A7%8C%EB%93%A4%EA%B8%B0)
+- 중복을 제거하기 위한 방법 및 Stub 코드 리팩토링
