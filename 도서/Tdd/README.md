@@ -23,7 +23,7 @@ TDD로 개발을 하지 않는 부분들은 할 수 없다고 판단했기 때�
 
 
 ## Todo List
-1. $5 + 10CHF = $10(환율이 2:1일 경우) <br>
+1. ~~$5 + 10CHF = $10(환율이 2:1일 경우)~~ <br>
    => 통화가 다른 두 금액을 더해서 주어진 환율에 맞게 변한 금액을 반환
 2. ~~$5 * 2 = $10~~ <br>
    ~~=> 주가 * 주식 을 반환해야 한다.~~
@@ -42,11 +42,13 @@ TDD로 개발을 하지 않는 부분들은 할 수 없다고 판단했기 때�
 14. ~~Franc와 Dollar 비교하기~~
 15. ~~통화~~
 16. ~~testFrancMultiplication을 지워야 할까?~~
-17. $5 + $5 = $10
+17. ~~$5 + $5 = $10~~
 18. $5 + $5에서 Money 반환하기
 19. ~~Bank.reduce(Money)~~
 20. ~~Money에 대한 통화 변환을 수행하는 Reduce~~
 21. ~~Reduce(Bank, String)~~
+22. Sum.plus
+23. Expression.times
 ## 책 내용정리
 
 ### 📌 [(1장) 다중 통화를 지원하는 Money 객체](https://github.com/phantom08266/TIL/wiki/%5B1%EC%9E%A5%5D-%EB%8B%A4%EC%A4%91-%ED%86%B5%ED%99%94%EB%A5%BC-%EC%A7%80%EC%9B%90%ED%95%98%EB%8A%94-Money-%EA%B0%9D%EC%B2%B4)

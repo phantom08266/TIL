@@ -1,10 +1,10 @@
 package tdd;
 
 public class Sum implements Expression{
-    Money augend;
-    Money addend;
+    Expression augend;
+    Expression addend;
 
-    public Sum(Money augend, Money addend) {
+    public Sum(Expression augend, Expression addend) {
         this.augend = augend;
         this.addend = addend;
     }
@@ -13,5 +13,10 @@ public class Sum implements Expression{
         int amount = augend.reduce(bank, to).amount
             + addend.reduce(bank, to).amount;
         return new Money(amount, to);
+    }
+
+    @Override
+    public Expression plus(Expression addend) {
+        return null;
     }
 }
