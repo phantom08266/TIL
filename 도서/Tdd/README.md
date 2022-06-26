@@ -12,11 +12,12 @@
 - ~~테스트 메서드 호출하기~~
 - ~~먼저 setUp호출하기~~
 - ~~나중에 tearDown 호출하기~~
-- 테스트 메서드가 실패하더라도 tearDown호출하기
+- ~~테스트 메서드가 실패하더라도 tearDown호출하기~~
 - 여러 개의 테스트 실행하기
 - ~~수집된 결과를 출력하기~~
 - ~~WasRun에 로그 문자열 남기기~~
 - ~~실패한 테스트 보고하기~~
+- setUp 에러를 잡아서 보고하기
 
 ## 🔍 [18장 xunit으로 가는  첫걸음](https://github.com/phantom08266/TIL/wiki/%5B18%EC%9E%A5%5D-xunit%EC%9C%BC%EB%A1%9C-%EA%B0%80%EB%8A%94--%EC%B2%AB%EA%B1%B8%EC%9D%8C)
 - TDD 마스터 방법!?

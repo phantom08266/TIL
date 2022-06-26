@@ -25,10 +25,11 @@ public abstract class TestCase {
             Class<WasRun> wasRun = WasRun.class;
             Method method = wasRun.getMethod(name);
             method.invoke(this);
-            this.tearDown();
         } catch (Exception e) {
             e.printStackTrace();
             result.testFailed();
+        } finally {
+            this.tearDown();
         }
     }
 }
