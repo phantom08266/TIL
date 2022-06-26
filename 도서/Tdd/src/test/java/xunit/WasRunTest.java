@@ -2,7 +2,6 @@ package xunit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class WasRunTest {
@@ -21,5 +20,12 @@ class WasRunTest {
         assertThat(test.wasRun).isZero();
         test.run();
         assertThat(test.wasRun).isNotZero();
+    }
+
+    @Test
+    void test3() {
+        WasRun wasRun = new WasRun("testMethod");
+        wasRun.run();
+        assertThat(wasRun.wasSetUp).isNotZero();
     }
 }
