@@ -15,18 +15,4 @@ public class WasRun extends TestCase{
     public void testMethod() {
         this.wasRun = 1;
     }
-
-    public void run() {
-        runMethod();
-    }
-
-    private void runMethod() {
-        try {
-            Class<WasRun> wasRun = WasRun.class;
-            Method method = wasRun.getMethod(name);
-            method.invoke(this);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-    }
 }
