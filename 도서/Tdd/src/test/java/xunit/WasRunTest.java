@@ -28,4 +28,6 @@ class WasRunTest {
         wasRun.run();
         assertThat(wasRun.wasSetUp).isNotZero();
     }
+
+
 }
