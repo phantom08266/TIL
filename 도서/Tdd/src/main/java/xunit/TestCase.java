@@ -2,13 +2,17 @@ package xunit;
 
 import java.lang.reflect.Method;
 
-public class TestCase {
+public abstract class TestCase {
     protected String name;
+
+    public abstract void setUp();
 
     public TestCase(String name) {
         this.name = name;
     }
+
     public void run() {
+        this.setUp();
         runMethod();
     }
 
