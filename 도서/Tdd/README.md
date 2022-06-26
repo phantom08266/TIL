@@ -1,12 +1,16 @@
 # 테스트 주도 개발 
 
+## 👀학습 내용
+- [1부 학습내용](https://github.com/phantom08266/TIL/wiki/TDD-%ED%95%99%EC%8A%B5-%EB%82%B4%EC%9A%A9(%EC%B0%B8%EA%B3%A0-%EB%8F%84%EC%84%9C-:-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EC%A3%BC%EB%8F%84-%EA%B0%9C%EB%B0%9C))
+
+
 ## 2부 학습 내용
 
 가장먼저 해야할 일은 역시 Todo list 작성하기!
 
 ### Todo List
 - ~~테스트 메서드 호출하기~~
-- 먼저 setUp호출하기
+- ~~먼저 setUp호출하기~~
 - 나중에 tearDown 호출하기
 - 테스트 메서드가 실패하더라도 tearDown호출하기
 - 여러 개의 테스트 실행하기
@@ -16,5 +20,8 @@
 - TDD 마스터 방법!?
 - 플러거블 셀렉터란?
 
-## 👀학습 내용
-- [1부 학습내용](https://github.com/phantom08266/TIL/wiki/TDD-%ED%95%99%EC%8A%B5-%EB%82%B4%EC%9A%A9(%EC%B0%B8%EA%B3%A0-%EB%8F%84%EC%84%9C-:-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EC%A3%BC%EB%8F%84-%EA%B0%9C%EB%B0%9C))
+## 🔍 [19장 테이블 차리기](https://github.com/phantom08266/TIL/wiki/%5B19%EC%9E%A5%5D-%ED%85%8C%EC%9D%B4%EB%B8%94-%EC%B0%A8%EB%A6%AC%EA%B8%B0)
+- 3A 패턴
+- 테스트 코드는 일단 성능 < 간결함
+
+
