@@ -9,4 +9,10 @@ class WasRunTest2 {
         TestCaseTest test = new TestCaseTest();
         test.testTemplateMethod();
     }
+
+    @Test
+    void test2() {
+        TestCaseTest test = new TestCaseTest();
+        test.testResult();
+    }
 }

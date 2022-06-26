@@ -16,6 +16,6 @@ public class TestCaseTest {
     public void testResult() {
         WasRun wasRun = new WasRun("testMethod");
         TestResult result = wasRun.run();
-        assertThat("1 run, 0 failed").isEqualTo(result.summary);
+        assertThat("1 run, 0 failed").isEqualTo(result.summary());
     }
 }

@@ -12,9 +12,10 @@ public abstract class TestCase {
         this.name = name;
     }
 
-    public void run() {
+    public TestResult run() {
         this.setUp();
         runMethod();
+        return new TestResult();
     }
 
     private void runMethod() {
