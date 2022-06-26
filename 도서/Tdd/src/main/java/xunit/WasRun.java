@@ -29,4 +29,8 @@ public class WasRun extends TestCase {
         this.wasRun = 1;
         this.log = this.log + "testMethod ";
     }
+
+    public void testBrokenMethod() {
+        throw new RuntimeException();
+    }
 }

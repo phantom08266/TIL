@@ -18,4 +18,10 @@ public class TestCaseTest {
         TestResult result = wasRun.run();
         assertThat("1 run, 0 failed").isEqualTo(result.summary());
     }
+
+    public void testFailedResult() {
+        WasRun wasRun = new WasRun("testBrokenMethod");
+        TestResult result = wasRun.run();
+        assertThat("1 run, 1 failed").isEqualTo(result.summary());
+    }
 }
