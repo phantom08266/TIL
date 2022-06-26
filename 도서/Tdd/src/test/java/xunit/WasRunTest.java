@@ -6,7 +6,7 @@ class WasRunTest {
 
     @Test
     void test1() {
-        WasRun testMethod = new WasRun("testMethod");
+        WasRun test = new WasRun("testMethod");
         System.out.println(test.wasRun);
         test.testMethod();
         System.out.println(test.wasRun);
