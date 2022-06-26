@@ -3,14 +3,13 @@ package xunit;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class WasRun {
+public class WasRun extends TestCase{
 
     public int wasRun;
-    private final String name;
 
     public WasRun(String name) {
+        super(name);
         this.wasRun = 0;
-        this.name = name;
     }
 
     public void testMethod() {
@@ -18,10 +17,10 @@ public class WasRun {
     }
 
     public void run() {
-        getattr();
+        runMethod();
     }
 
-    private void getattr() {
+    private void runMethod() {
         try {
             Class<WasRun> wasRun = WasRun.class;
             Method method = wasRun.getMethod(name);
@@ -30,5 +29,4 @@ public class WasRun {
             e.printStackTrace();
         }
     }
-
 }
