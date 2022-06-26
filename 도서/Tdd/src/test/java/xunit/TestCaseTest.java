@@ -12,4 +12,10 @@ public class TestCaseTest {
         wasRun.run();
         assertThat(wasRun.log).isEqualTo("setUp testMethod tearDown ");
     }
+
+    public void testResult() {
+        WasRun wasRun = new WasRun("testMethod");
+        TestResult result = wasRun.run();
+        assertThat("1 run, 0 failed").isEqualTo(result.summary);
+    }
 }
