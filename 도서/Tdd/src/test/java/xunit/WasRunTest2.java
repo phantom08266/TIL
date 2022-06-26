@@ -7,7 +7,6 @@ class WasRunTest2 {
     @Test
     void test1() {
         TestCaseTest test = new TestCaseTest();
-        test.setUp();
         test.testTemplateMethod();
     }
 }
