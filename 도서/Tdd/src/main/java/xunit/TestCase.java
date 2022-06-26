@@ -1,6 +1,5 @@
 package xunit;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class TestCase {
@@ -18,7 +17,7 @@ public class TestCase {
             Class<WasRun> wasRun = WasRun.class;
             Method method = wasRun.getMethod(name);
             method.invoke(this);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
