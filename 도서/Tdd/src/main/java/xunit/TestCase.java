@@ -16,11 +16,11 @@ public abstract class TestCase {
         TestResult testResult = new TestResult();
         testResult.testStarted();
         this.setUp();
-        runMethod();
+        runMethod(testResult);
         return testResult;
     }
 
-    private void runMethod() {
+    private void runMethod(TestResult result) {
         try {
             Class<WasRun> wasRun = WasRun.class;
             Method method = wasRun.getMethod(name);
@@ -28,6 +28,7 @@ public abstract class TestCase {
             this.tearDown();
         } catch (Exception e) {
             e.printStackTrace();
+            result.testFailed();
         }
     }
 }

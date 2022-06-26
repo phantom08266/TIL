@@ -15,4 +15,10 @@ class WasRunTest2 {
         TestCaseTest test = new TestCaseTest();
         test.testResult();
     }
+
+    @Test
+    void test3() {
+        TestCaseTest test = new TestCaseTest();
+        test.testFailedResultFormatting();
+    }
 }
