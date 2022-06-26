@@ -24,4 +24,11 @@ public class TestCaseTest {
         TestResult result = wasRun.run();
         assertThat("1 run, 1 failed").isEqualTo(result.summary());
     }
+
+    public void testFailedResultFormatting() {
+        TestResult testResult = new TestResult();
+        testResult.testStarted();
+        testResult.testFailed();
+        assertThat("1 run, 1 failed").isEqualTo(testResult.summary());
+    }
 }
