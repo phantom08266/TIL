@@ -8,7 +8,7 @@ class WasRunTest {
     void test1() {
         WasRun test = new WasRun("testMethod");
         System.out.println(test.wasRun);
-        test.testMethod();
+        test.run();
         System.out.println(test.wasRun);
     }
 }
