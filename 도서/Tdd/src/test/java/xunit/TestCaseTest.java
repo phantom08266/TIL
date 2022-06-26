@@ -19,7 +19,7 @@ public class TestCaseTest {
 
     public void testSetUp() {
         this.wasRun.run();
-        assertThat(wasRun.log).isEqualTo("setUp ");
+        assertThat(wasRun.log).isEqualTo("setUp testMethod");
     }
 
 }
