@@ -10,7 +10,7 @@ class WasRunTest {
     void test1() {
         WasRun test = new WasRun("testMethod");
         System.out.println(test.wasRun);
-        test.run();
+        test.run(new TestResult());
         System.out.println(test.wasRun);
     }
 
@@ -18,14 +18,14 @@ class WasRunTest {
     void test2() {
         WasRun test = new WasRun("testMethod");
         assertThat(test.wasRun).isZero();
-        test.run();
+        test.run(new TestResult());
         assertThat(test.wasRun).isNotZero();
     }
 
     @Test
     void test3() {
         WasRun wasRun = new WasRun("testMethod");
-        wasRun.run();
+        wasRun.run(new TestResult());
         assertThat(wasRun.wasSetUp).isNotZero();
     }
 

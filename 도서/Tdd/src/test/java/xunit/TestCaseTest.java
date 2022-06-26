@@ -9,21 +9,21 @@ class TestCaseTest {
     @Test
     void testTemplateMethod() {
         WasRun wasRun = new WasRun("testMethod");
-        wasRun.run();
+        wasRun.run(new TestResult());
         assertThat(wasRun.log).isEqualTo("setUp testMethod tearDown ");
     }
 
     @Test
     void testResult() {
         WasRun wasRun = new WasRun("testMethod");
-        TestResult result = wasRun.run();
+        TestResult result = wasRun.run(new TestResult());
         assertThat("1 run, 0 failed").isEqualTo(result.summary());
     }
 
     @Test
     void testFailedResult() {
         WasRun wasRun = new WasRun("testBrokenMethod");
-        TestResult result = wasRun.run();
+        TestResult result = wasRun.run(new TestResult());
         assertThat("1 run, 1 failed").isEqualTo(result.summary());
     }
 
@@ -40,7 +40,8 @@ class TestCaseTest {
         TestSuit testSuit = new TestSuit();
         testSuit.add(new WasRun("testMethod"));
         testSuit.add(new WasRun("testBrokenMethod"));
-        TestResult result = testSuit.run();
+        TestResult result = new TestResult();
+        testSuit.run(result);
         assertThat("2 run, 1 failed").isEqualTo(result.summary());
     }
 }
