@@ -10,7 +10,6 @@ public class TestCaseTest {
     public void testTemplateMethod() {
         WasRun wasRun = new WasRun("testMethod");
         wasRun.run();
-        assertThat(wasRun.log).isEqualTo("setUp testMethod ");
+        assertThat(wasRun.log).isEqualTo("setUp testMethod tearDown ");
     }
-
 }
