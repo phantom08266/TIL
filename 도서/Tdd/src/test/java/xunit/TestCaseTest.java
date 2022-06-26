@@ -2,28 +2,35 @@ package xunit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class TestCaseTest {
+    TestResult result;
+
+    @BeforeEach
+    void setUp(){
+        result = new TestResult();
+    }
 
     @Test
     void testTemplateMethod() {
         WasRun wasRun = new WasRun("testMethod");
-        wasRun.run(new TestResult());
+        wasRun.run(result);
         assertThat(wasRun.log).isEqualTo("setUp testMethod tearDown ");
     }
 
     @Test
     void testResult() {
         WasRun wasRun = new WasRun("testMethod");
-        TestResult result = wasRun.run(new TestResult());
+        wasRun.run(result);
         assertThat("1 run, 0 failed").isEqualTo(result.summary());
     }
 
     @Test
     void testFailedResult() {
         WasRun wasRun = new WasRun("testBrokenMethod");
-        TestResult result = wasRun.run(new TestResult());
+        wasRun.run(result);
         assertThat("1 run, 1 failed").isEqualTo(result.summary());
     }
 
