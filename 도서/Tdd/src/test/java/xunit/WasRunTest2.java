@@ -8,6 +8,6 @@ class WasRunTest2 {
     void test1() {
         TestCaseTest test = new TestCaseTest();
         test.setUp();
-        test.testSetUp();
+        test.testTemplateMethod();
     }
 }

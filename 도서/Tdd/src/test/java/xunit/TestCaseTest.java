@@ -13,13 +13,9 @@ public class TestCaseTest {
         wasRun = new WasRun("testMethod");
     }
 
-    public void testRunning() {
-        wasRun.run();
-    }
-
-    public void testSetUp() {
+    public void testTemplateMethod() {
         this.wasRun.run();
-        assertThat(wasRun.log).isEqualTo("setUp testMethod");
+        assertThat(wasRun.log).isEqualTo("setUp testMethod ");
     }
 
 }
