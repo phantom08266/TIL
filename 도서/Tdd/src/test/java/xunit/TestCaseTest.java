@@ -2,8 +2,6 @@ package xunit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.assertj.core.api.Assertions;
-
 public class TestCaseTest {
 
     private WasRun wasRun;
@@ -21,7 +19,7 @@ public class TestCaseTest {
 
     public void testSetUp() {
         this.wasRun.run();
-        assertThat(wasRun.wasSetUp).isNotZero();
+        assertThat(wasRun.log).isEqualTo("setUp ");
     }
 
 }
