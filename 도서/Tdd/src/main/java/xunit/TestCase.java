@@ -13,9 +13,11 @@ public abstract class TestCase {
     }
 
     public TestResult run() {
+        TestResult testResult = new TestResult();
+        testResult.testStarted();
         this.setUp();
         runMethod();
-        return new TestResult();
+        return testResult;
     }
 
     private void runMethod() {
