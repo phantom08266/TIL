@@ -1,4 +1,4 @@
-package tdd;
+package money;
 
 public class Dog {
     private String name;

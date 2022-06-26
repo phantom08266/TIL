@@ -1,4 +1,4 @@
-package tdd;
+package money;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

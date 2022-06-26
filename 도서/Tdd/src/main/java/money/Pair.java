@@ -1,6 +1,4 @@
-package tdd;
-
-import java.util.Objects;
+package money;
 
 public class Pair {
     private String from;

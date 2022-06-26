@@ -1,4 +1,4 @@
-package tdd;
+package money;
 
 import java.util.Hashtable;
 
