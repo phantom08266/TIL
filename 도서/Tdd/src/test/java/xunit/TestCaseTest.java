@@ -34,4 +34,13 @@ class TestCaseTest {
         testResult.testFailed();
         assertThat("1 run, 1 failed").isEqualTo(testResult.summary());
     }
+
+    @Test
+    void testSuit() {
+        TestSuit testSuit = new TestSuit();
+        testSuit.add(new WasRun("testMethod"));
+        testSuit.add(new WasRun("testBrokenMethod"));
+        TestResult result = testSuit.run();
+        assertThat("2 run, 1 failed").isEqualTo(result.summary());
+    }
 }
