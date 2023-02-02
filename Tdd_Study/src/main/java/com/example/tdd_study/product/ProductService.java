@@ -1,9 +1,12 @@
 package com.example.tdd_study.product;
 
+import org.springframework.stereotype.Service;
+
+@Service
 class ProductService {
     private final ProductPort productPort;
 
-    ProductService(ProductPort productPort) {
+    ProductService(final ProductPort productPort) {
         this.productPort = productPort;
     }
 
