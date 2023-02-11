@@ -1,6 +1,8 @@
 package com.example.tdd_study.product;
 
 import com.example.tdd_study.ApiTest;
+import com.example.tdd_study.product.application.service.AddProductRequest;
+import com.example.tdd_study.product.application.service.ProductService;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;

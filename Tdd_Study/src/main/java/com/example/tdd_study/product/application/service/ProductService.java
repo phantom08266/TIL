@@ -1,10 +1,13 @@
-package com.example.tdd_study.product;
+package com.example.tdd_study.product.application.service;
 
+
+import com.example.tdd_study.product.application.port.ProductPort;
+import com.example.tdd_study.product.domain.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-class ProductService {
+public class ProductService {
     private final ProductPort productPort;
 
     ProductService(final ProductPort productPort) {

@@ -1,5 +1,8 @@
 package com.example.tdd_study.product;
 
+import com.example.tdd_study.product.application.service.AddProductRequest;
+import com.example.tdd_study.product.application.service.GetProductResponse;
+import com.example.tdd_study.product.application.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -7,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
-class ProductController {
+public class ProductController {
 
     private final ProductService productService;
 

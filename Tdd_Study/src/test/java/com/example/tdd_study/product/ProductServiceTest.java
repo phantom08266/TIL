@@ -1,5 +1,7 @@
 package com.example.tdd_study.product;
 
+import com.example.tdd_study.product.application.service.GetProductResponse;
+import com.example.tdd_study.product.application.service.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

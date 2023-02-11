@@ -1,5 +1,7 @@
 package com.example.tdd_study.product;
 
+import com.example.tdd_study.product.application.service.AddProductRequest;
+import com.example.tdd_study.product.domain.DiscountPolicy;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.ExtractableResponse;
