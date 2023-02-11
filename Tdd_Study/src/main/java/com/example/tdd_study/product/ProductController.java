@@ -16,4 +16,10 @@ class ProductController {
     public void addProduct(@RequestBody AddProductRequest addProductRequest) {
         productService.addProduct(addProductRequest);
     }
+
+    @GetMapping("/{productId}")
+    @ResponseStatus(HttpStatus.OK)
+    public GetProductResponse getProduct(@PathVariable Long productId) {
+        return productService.getProduct(productId);
+    }
 }
