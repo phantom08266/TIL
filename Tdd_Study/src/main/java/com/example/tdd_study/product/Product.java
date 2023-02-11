@@ -1,12 +1,23 @@
 package com.example.tdd_study.product;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.util.Assert;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "products")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private final String name;
-    private final int price;
-    private final DiscountPolicy discountPolicy;
+    private String name;
+    private int price;
+    private DiscountPolicy discountPolicy;
 
     public Product(String name, int price, DiscountPolicy discountPolicy) {
         Assert.hasText(name, "상품명을 입력해주세요.");
