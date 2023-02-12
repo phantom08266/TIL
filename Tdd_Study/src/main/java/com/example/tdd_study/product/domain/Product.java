@@ -35,4 +35,13 @@ public class Product {
     public Long getId() {
         return id;
     }
+
+    public void update(String name, int price, DiscountPolicy discountPolicy) {
+        Assert.hasText(name, "상품명을 입력해주세요");
+        Assert.isTrue(price > 0, "상품 가격은 0보다 커야 합니다.");
+        Assert.notNull(discountPolicy, "할인 정책은 필수입니다.");
+        this.name = name;
+        this.price = price;
+        this.discountPolicy = discountPolicy;
+    }
 }
