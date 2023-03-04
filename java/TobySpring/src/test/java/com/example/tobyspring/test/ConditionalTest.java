@@ -10,6 +10,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -60,6 +61,13 @@ public class ConditionalTest {
 
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
+    @Conditional(BooleanCondition.class)
+    @interface BooleanConditional {
+        boolean value();
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
     @Conditional(TrueCondition.class)
     @interface TrueConditional {
     }
@@ -73,7 +81,8 @@ public class ConditionalTest {
     }
 
     @Configuration
-    @TrueConditional
+//    @TrueConditional
+    @BooleanConditional(true)
     static class Config1 {
         @Bean
         public MyBean myBean() {
@@ -82,7 +91,8 @@ public class ConditionalTest {
     }
 
     @Configuration
-    @FalseConditional
+//    @FalseConditional
+    @BooleanConditional(false)
     static class Config2 {
         @Bean
         public MyBean myBean() {
@@ -101,6 +111,18 @@ public class ConditionalTest {
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
             return false;
+        }
+    }
+
+    static class BooleanCondition implements Condition {
+        @Override
+        public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+            // BooleanConditional애노테이션응 사용하는 클래스 이름들의 애노테이션 boolean value값을 가져온다.
+            Map<String, Object> annotationAttributes =
+                    metadata.getAnnotationAttributes(BooleanConditional.class.getName());
+
+            boolean value = (boolean) annotationAttributes.get("value");
+            return value;
         }
     }
 }
