@@ -1,2 +1,2 @@
-com.example.config.DispatcherServletConfig
-com.example.config.TomcatServletWebServerConfig
+com.example.config.autoconfig.DispatcherServletConfig
+com.example.config.autoconfig.TomcatServletWebServerConfig

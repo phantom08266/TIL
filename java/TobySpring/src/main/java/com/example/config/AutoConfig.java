@@ -21,10 +21,6 @@ public class AutoConfig implements DeferredImportSelector {
                 .forEach(imports::add);
 
         return imports.toArray(String[]::new);
-//        return new String[] {
-//                "com.example.config.DispatcherServletConfig",
-//                "com.example.config.TomcatServletWebServerConfig"
-//        };
     }
 
 }

@@ -1,10 +1,11 @@
-package com.example.config;
+package com.example.config.autoconfig;
 
+import com.example.config.MyAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.DispatcherServlet;
 
-@Configuration
+@MyAutoConfiguration
 public class DispatcherServletConfig {
 
     @Bean
