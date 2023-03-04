@@ -20,10 +20,10 @@ repositories {
 
 dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web')
-//            {
-//                exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
-//            }
-//    implementation 'org.springframework.boot:spring-boot-starter-jetty'
+            {
+                exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+            }
+    implementation 'org.springframework.boot:spring-boot-starter-jetty'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
