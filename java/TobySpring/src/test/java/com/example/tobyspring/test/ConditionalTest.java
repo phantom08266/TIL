@@ -6,6 +6,11 @@ import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.*;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,7 +32,7 @@ public class ConditionalTest {
         applicationContext.register(Config2.class);
         applicationContext.refresh();
 
-        assertThatThrownBy( () -> {
+        assertThatThrownBy(() -> {
             applicationContext.getBean(Config2.class);
         }).isInstanceOf(NoSuchBeanDefinitionException.class);
     }
@@ -36,7 +41,7 @@ public class ConditionalTest {
     void 스프링부트가_제공하는_테스트전용_서블릿컨테이너사용하여_conditional_bean_구분() {
         ApplicationContextRunner contextRunner = new ApplicationContextRunner();
         contextRunner.withUserConfiguration(Config1.class)
-                .run( context -> {
+                .run(context -> {
                     assertThat(context).hasSingleBean(Config1.class);
                     assertThat(context).hasSingleBean(MyBean.class);
                 });
@@ -53,8 +58,22 @@ public class ConditionalTest {
 
     }
 
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    @Conditional(TrueCondition.class)
+    @interface TrueConditional {
+    }
+
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    @Conditional(FalseCondition.class)
+    @interface FalseConditional {
+
+    }
+
     @Configuration
-    @Conditional(TrueConditional.class)
+    @TrueConditional
     static class Config1 {
         @Bean
         public MyBean myBean() {
@@ -63,7 +82,7 @@ public class ConditionalTest {
     }
 
     @Configuration
-    @Conditional(FalseConditional.class)
+    @FalseConditional
     static class Config2 {
         @Bean
         public MyBean myBean() {
@@ -71,14 +90,14 @@ public class ConditionalTest {
         }
     }
 
-    static class TrueConditional implements Condition {
+    static class TrueCondition implements Condition {
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
             return true;
         }
     }
 
-    static class FalseConditional implements Condition {
+    static class FalseCondition implements Condition {
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
             return false;
